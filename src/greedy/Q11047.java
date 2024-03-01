@@ -3,6 +3,9 @@ package greedy;
 import java.io.*;
 import java.util.StringTokenizer;
 
+/**
+ * https://www.acmicpc.net/problem/Q11047
+ */
 public class Q11047 {
 
     public static int answer = 0;
