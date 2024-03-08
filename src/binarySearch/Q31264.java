@@ -26,25 +26,34 @@ public class Q31264 {
 
         Arrays.sort(score);
 
-        double min = A;
+        for (int i =0 ; i < N; i++) {
+            int target = score[i];
+            int sum = maxScore(score, target) + maxScore(score, target + ( 2 * target)) + maxScore(score, target + ( 3 * target));
 
-        for (int i=0; i < M; i++) min = min / 2;
+            System.out.println(maxScore(score, target + ( 2 * target)));
+            System.out.println(maxScore(score, target + ( 3 * target)));
+            if (sum >= A) {
+                System.out.println(target);
+                return;
+            }
+        }
 
-        int target = (int) Math.ceil(min);
+    }
 
+    public static int maxScore(int[] score, int target) {
+
+        int max_score = 0;
         int left = 0;
-        int right = N - 1;
-
-        int min_score = Integer.MAX_VALUE;
+        int right = score.length - 1;
 
         while (left <= right) {
 
 
             int mid = (left + right) / 2;
 
-            if (min_score > score[mid]
-                    && score[mid] >= target) {
-                min_score = score[mid];
+            if (max_score <= score[mid]
+                    && score[mid] <= target) {
+                max_score = Math.max(max_score, score[mid]);
             }
 
             if (score[mid] > target) {
@@ -52,14 +61,13 @@ public class Q31264 {
             } else if (score[mid] < target) {
                 left = mid + 1;
             } else {
-                min_score = Math.min(min_score, score[mid]);
+                max_score = Math.max(max_score, score[mid]);
                 break;
             }
 
         }
 
-        System.out.println(min_score);
+        return max_score;
+
     }
-
-
 }
