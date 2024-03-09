@@ -6,6 +6,9 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.StringTokenizer;
 
+/**
+ * https://www.acmicpc.net/problem/31264
+ */
 public class Q31264 {
 
     public static void main(String[] args) throws IOException {
@@ -21,38 +24,49 @@ public class Q31264 {
 
         int[] score = new int[N];
 
+        long max = Integer.MAX_VALUE;
+
         st = new StringTokenizer(br.readLine());
-        for (int i=0; i < N;i ++) score[i] = Integer.parseInt(st.nextToken());
+        for (int i=0; i < N;i ++) {
+            score[i] = Integer.parseInt(st.nextToken());
+            max = Math.max(max, score[i]);
+        }
 
         Arrays.sort(score);
 
-        for (int i =0 ; i < N; i++) {
-            int target = score[i];
-            int sum = maxScore(score, target) + maxScore(score, target + ( 2 * target)) + maxScore(score, target + ( 3 * target));
+        long min = 1;
 
-            System.out.println(maxScore(score, target + ( 2 * target)));
-            System.out.println(maxScore(score, target + ( 3 * target)));
-            if (sum >= A) {
-                System.out.println(target);
-                return;
+        while (min <= max) {
+
+            long sum = 0;
+            long mid = (min + max) / 2;
+
+            for (int i=0; i < M; i++) {
+                sum += getScore(score, mid + sum);
             }
+
+            if (sum >= A) {
+                max = mid - 1;
+            } else if (sum < A){
+                min = mid + 1;
+            }
+
         }
 
+        System.out.println(min);
     }
 
-    public static int maxScore(int[] score, int target) {
+    public static long getScore(int[] score, long target) {
 
-        int max_score = 0;
+        long max_score = 0;
         int left = 0;
         int right = score.length - 1;
 
         while (left <= right) {
 
-
             int mid = (left + right) / 2;
 
-            if (max_score <= score[mid]
-                    && score[mid] <= target) {
+            if (target >= score[mid]) {
                 max_score = Math.max(max_score, score[mid]);
             }
 
@@ -61,7 +75,6 @@ public class Q31264 {
             } else if (score[mid] < target) {
                 left = mid + 1;
             } else {
-                max_score = Math.max(max_score, score[mid]);
                 break;
             }
 
