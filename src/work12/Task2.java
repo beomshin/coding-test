@@ -4,52 +4,50 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
 public class Task2 {
 
+    private static int[] dir = {-1, 1};
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
 
-        int L  = Integer.parseInt(st.nextToken()); // 위치
+        long L  = Long.parseLong(st.nextToken()); // 위치
         int N  = Integer.parseInt(st.nextToken()); // 가로등 개수
         int K  = Integer.parseInt(st.nextToken()); // K번째까지 출력
-
-        int[] loc = new int[N];
-        int[] light = new int[L + 1];
-        int[] dir= {-1, 1};
-        PriorityQueue<int[]> q = new PriorityQueue<>(((o1, o2) -> o1[1] - o2[1])); // 내림차순
+        HashSet<Long> visited = new HashSet<>();
+        PriorityQueue<Long[]> q = new PriorityQueue<>(((o1, o2) -> Math.toIntExact(o1[1] - o2[1]))); // 내림차순
 
         st = new StringTokenizer(br.readLine());
 
         for (int i = 0; i < N; i++) {
-            loc[i] = Integer.parseInt(st.nextToken());
-            q.add(new int[]{loc[i], 0});
+            q.add(new Long[]{Long.parseLong(st.nextToken()), 0L});
         }
 
-        Arrays.fill(light, L);
-
         while (!q.isEmpty()) {
-            int[] data = q.poll();
-            int loc_temp = data[0];
-            int light_temp = data[1];
+            Long[] t = q.poll();
+            long loc_temp = t[0];
+            long light_temp = t[1];
 
-            System.out.println(light_temp);
+            if (!visited.contains(loc_temp)) {
+                System.out.println(light_temp);
+                visited.add(loc_temp);
 
-            K--;
-            if (K ==0) {
-                break;
-            }
+                K--;
+                if (K ==0) break;
 
-            for (int i=0; i < 2; i++) {
-                int x1 = loc_temp + dir[i];
-                if (x1 >=0 && x1 <= L && light[x1] > light_temp + 1) {
-                    light[x1] = light_temp + 1;
-                    q.add(new int[]{x1, light_temp + 1});
+                for (int i=0; i < 2; i++) {
+                    long x1 = loc_temp + dir[i];
+                    if (x1 >=0 && x1 <= L ) {
+                        q.add(new Long[]{x1, light_temp + 1});
+                    }
                 }
             }
+
         }
 
     }
